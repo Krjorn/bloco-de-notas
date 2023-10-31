@@ -1,0 +1,116 @@
+:root {
+    --primary-color: #fdf8e9;
+    --secondary-color: #186F65;
+    --tertiary-color: #B2533E;
+    --font-color: #1A1A1A;
+    --primary-font: 'Fira Sans', sans-serif;
+}
+
+*, body {
+    font-family: var(--primary-font);
+    font-size: 1rem;
+}
+
+body {
+    background-color: var(--primary-color);
+}
+
+/* FORM */
+
+.form {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form__item, .form__btn--send {
+    padding: .5rem 1rem;
+    border: 2px solid var(--secondary-color);
+    transition: .15s ease-in;
+}
+
+.form__item {
+    width: 50%;
+    max-width: 400px;
+    border-radius: 50px 0 0 50px;
+    background-color: var(--primary-color);
+}
+
+.form__item:focus {
+    outline: none;
+}
+
+.form__item:hover,
+.form__item:hover + .form__btn--send {
+    box-shadow: 0 1px 4px rgba(24, 111, 101, .5);
+}
+
+.form__btn--send {
+    border-radius: 0 50px 50px 0;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* LIST */
+
+.items__list {
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.items__list--item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 0 .5rem;
+    border-bottom: 2px solid var(--secondary-color);
+    font-size: 1.25rem;
+}
+
+button {
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.list--item--text {
+    max-width: 70%;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.item--text--check {
+    color: var(--secondary-color);
+}
+
+.item--text--expand {
+    display: none;
+    cursor: pointer;
+}
+
+.item--btn {
+    padding: .25rem;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.item--btn--edit {
+    border: 2px solid var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.item--btn--delete {
+    border: 2px solid var(--tertiary-color);
+    color: var(--tertiary-color);
+}
+
+@media screen and (min-width: 540px) {
+    .list--item--text {
+        max-width: 80%;
+    }
+}
