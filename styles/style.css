@@ -2,6 +2,8 @@
     --primary-color: #fdf8e9;
     --secondary-color: #186F65;
     --tertiary-color: #B2533E;
+    --disabled-color: #7F7F7F;
+    --shadow-color: rgba(24, 111, 101, .5);
     --font-color: #1A1A1A;
     --primary-font: 'Fira Sans', sans-serif;
 }
@@ -9,6 +11,7 @@
 *, body {
     font-family: var(--primary-font);
     font-size: 1rem;
+    box-sizing: border-box;
 }
 
 body {
@@ -18,22 +21,23 @@ body {
 /* FORM */
 
 .form {
-    margin: 3rem 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 80%;
+    max-width: 500px;
+    margin: 3rem auto;
 }
 
-.form__item, .form__btn--send {
+.form__item,
+.form__btn--send,
+.form__btn--cancel {
     padding: .5rem 1rem;
     border: 2px solid var(--secondary-color);
     transition: .15s ease-in;
 }
 
 .form__item {
-    width: 50%;
-    max-width: 400px;
-    border-radius: 50px 0 0 50px;
+    width: 100%;
+    margin-bottom: .5rem;
+    border-radius: 25px;
     background-color: var(--primary-color);
 }
 
@@ -42,15 +46,30 @@ body {
 }
 
 .form__item:hover,
-.form__item:hover + .form__btn--send {
-    box-shadow: 0 1px 4px rgba(24, 111, 101, .5);
+.form__item:focus {
+    box-shadow: 0 1px 6px var(--shadow-color);
+}
+
+.form div {
+    display: flex;
+}
+
+.form__btn--cancel,
+.form__btn--send {
+    width: 50%;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.form__btn--cancel {
+    background-color: var(--tertiary-color);
+    border-color: var(--tertiary-color);
+    border-radius: 25px 0 0 25px;
 }
 
 .form__btn--send {
-    border-radius: 0 50px 50px 0;
     background-color: var(--secondary-color);
-    color: var(--primary-color);
-    cursor: pointer;
+    border-radius: 0 25px 25px 0;
 }
 
 /* LIST */
@@ -88,6 +107,16 @@ button {
     color: var(--secondary-color);
 }
 
+.list--item--text p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.checked {
+    text-decoration: line-through;
+    color: var(--disabled-color);
+}
+
 .item--text--expand {
     display: none;
     cursor: pointer;
@@ -102,6 +131,7 @@ button {
 .item--btn--edit {
     border: 2px solid var(--secondary-color);
     color: var(--secondary-color);
+    margin-right: .5rem;
 }
 
 .item--btn--delete {
