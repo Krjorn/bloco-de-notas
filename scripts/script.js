@@ -228,3 +228,26 @@ function exists() {
 
     return presence;
 }
+
+const html = document.querySelector('html');
+const btnTheme = document.querySelector('[data-btn-theme]');
+const btnThemeSelection = document.querySelector('[data-btn-theme-selection]');
+const themeList = btnThemeSelection.querySelectorAll('span');
+
+html.setAttribute('data-theme', localStorage.theme ? localStorage.theme : 'bright');
+
+btnTheme.addEventListener('click', () => {
+    btnThemeSelection.classList.toggle('theme__selection--hidden');
+});
+
+themeList.forEach(btn => {
+    const currentTheme = btn.classList[1];
+
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        html.setAttribute('data-theme', currentTheme);
+        btnThemeSelection.classList.toggle('theme__selection--hidden');
+
+        localStorage.setItem('theme', currentTheme);
+    });
+});

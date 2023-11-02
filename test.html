@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="bright">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,6 +13,17 @@
     <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
+    <button class="theme__btn" data-btn-theme>
+        TEMA:
+        <span class="theme__btn--color"></span>
+        <div class="theme__selection theme__selection--hidden" data-btn-theme-selection>
+            <span class="theme__btn--color bright"></span>
+            <span class="theme__btn--color dark"></span>
+            <span class="theme__btn--color pastel"></span>
+            <span class="theme__btn--color vintage"></span>
+            <span class="theme__btn--color neon"></span>
+        </div>
+    </button>
     <form class="form" data-form>
         <input type="text" class="form__item" placeholder="Digite um item" data-form-input>
         <div>
@@ -21,26 +32,6 @@
         </div>
     </form>
     <ul class="items__list" data-note-list>
-        <li class="items__list--item">
-            <div class="list--item--text">
-                <button class="material-symbols-outlined item--text--check" data-btn-check>
-                    check_small
-                </button>
-                <p data-value="Item digitado">Item digitado Lorem, ipsum dolor sit amet consectetur adipisicing elit. Assumenda aliquid sapiente doloribus, accusamus quisquam dolorem minima vitae quod eum quasi magnam amet rem et veniam nemo possimus ad, ipsam nam.</p>
-                <button class="material-symbols-outlined item--text--expand" data-btn-expand>
-                    <!-- expand_less -->
-                    expand_more
-                </button>
-            </div>
-            <div>
-                <button class="material-symbols-outlined item--btn item--btn--edit" data-btn-edit>
-                    edit_note
-                </button>
-                <button class="material-symbols-outlined item--btn item--btn--delete" data-btn-delete>
-                    delete
-                </button>
-            </div>
-        </li>
     </ul>
     <script src="./scripts/script.js"></script>
 </body>
