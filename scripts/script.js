@@ -1,7 +1,7 @@
 const form = document.querySelector('[data-form]');
 const input = document.querySelector('[data-form-input]');
 const btnCancel = document.querySelector('[data-form-cancel]');
-const noteList = document.querySelector('[data-note-list]');
+const notesList = document.querySelector('[data-notes-list]');
 
 let savedNotes = localStorage.notes ? JSON.parse(localStorage.notes) : [];
 let editContent = null;
@@ -12,30 +12,33 @@ savedNotes.forEach(item => createNote(item));
 form.addEventListener('submit', e => {
     e.preventDefault();
     addOrUpdateList();
-    input.setAttribute('placeholder', 'Digite um item');
 });
 
 btnCancel.addEventListener('click', () => {
-    input.value = '';
-    input.setAttribute('placeholder', 'Digite um item');
+    resetInputValue();
     input.blur();
-    editContent = null;
-    editItem = null;
+    resetEdit();
 });
 
 function addOrUpdateList() {
     if(!input.value) {
-        alert('Escreva algo para criar uma nota.');
+        alert('Escreva algo para criar um item.');
         return;
     }
 
     if(editContent) {
+        if(exists()) {
+            alert('Item já existente!');
+            resetInputValue(`Editando: ${editContent}`);
+            return;
+        }
+
         const p = document.querySelector(`[data-value="${editContent}"]`);
         p.textContent = input.value;
         p.setAttribute('data-value', input.value);
 
-        const text = p.parentNode;
-        text.style.whiteSpace = 'normal';
+        const div = p.parentNode;
+        div.style.whiteSpace = 'normal';
 
         const btnExpand = p.parentNode.querySelector('[data-btn-expand]');
 
@@ -45,24 +48,20 @@ function addOrUpdateList() {
         editItem.note = input.value;
 
         if(p.offsetHeight > 40) {
-            text.style.whiteSpace = 'nowrap';
-        }
-
-        if(text.style.whiteSpace === 'nowrap') {
+            div.style.whiteSpace = 'nowrap';
             btnExpand.style.display = 'block';
             btnExpand.textContent = 'expand_more';
         } else {
             btnExpand.style.display = 'none';
         }
 
-        savedNotes[i] = editItem;
+        savedNotes.splice(i, 1, editItem);
 
-        updateNotes();
+        localStorage.setItem('notes', JSON.stringify(savedNotes));
 
-        editContent = null;
-        editItem = null;
+        resetEdit();
 
-        input.value = '';
+        resetInputValue();
 
         return;
     }
@@ -79,46 +78,34 @@ function addOrUpdateList() {
         expanded: false
     };
 
-    if(!savedNotes.includes(newNote)) {
-        createNote(newNote);
+    createNote(newNote);
 
-        savedNotes.push(newNote);
+    savedNotes.push(newNote);
 
-        updateNotes();
-    }
+    localStorage.setItem('notes', JSON.stringify(savedNotes));
 
-    input.value = '';
+    resetInputValue();
 }
 
 function createNote(note) {
     const li = document.createElement('li');
     li.classList.add('items__list--item');
 
-    const text = document.createElement('div');
-    text.classList.add('list--item--text');
+    const div = document.createElement('div');
+    div.classList.add('list--item--text');
 
     const btnCheck = document.createElement('button');
     btnCheck.classList.add('material-symbols-outlined', 'item--text--check');
-    btnCheck.setAttribute('data-btn-check', '');
     btnCheck.textContent = 'check_small';
     btnCheck.addEventListener('click', () => {
         p.classList.add('checked');
 
-        btnCheck.disabled = true;
-        btnCheck.style.color = 'var(--disabled-color)';
-        btnCheck.style.cursor = 'auto';
-
-        btnEdit.disabled = true;
-        btnEdit.style.color = 'var(--disabled-color)';
-        btnEdit.style.borderColor = 'var(--disabled-color)';
-        btnEdit.style.cursor = 'auto';
+        disableBtn(btnCheck);
+        disableBtn(btnEdit);
 
         note.checked = true;
 
-        const i = savedNotes.findIndex(item => item.note === note.note);
-        savedNotes[i] = note;
-
-        updateNotes();
+        updateLocalStorage('check', note);
     });
 
     const p = document.createElement('p');
@@ -131,32 +118,28 @@ function createNote(note) {
     btnExpand.textContent = 'expand_more';
     btnExpand.addEventListener('click', () => {
         if(!note.expanded) {
-            text.style.whiteSpace = 'normal';
+            div.style.whiteSpace = 'normal';
             btnExpand.textContent = 'expand_less';
 
             note.expanded = true;
         } else {
-            text.style.whiteSpace = 'nowrap';
+            div.style.whiteSpace = 'nowrap';
             btnExpand.textContent = 'expand_more';
 
             note.expanded = false;
         }
 
-        const i = savedNotes.findIndex(item => item.note === note.note);
-        savedNotes[i] = note;
-
-        updateNotes();
+        updateLocalStorage('expand', note);
     });
 
-    text.appendChild(btnCheck);
-    text.appendChild(p);
-    text.appendChild(btnExpand);
+    div.appendChild(btnCheck);
+    div.appendChild(p);
+    div.appendChild(btnExpand);
 
     const btns = document.createElement('div');
 
     const btnEdit = document.createElement('button');
     btnEdit.classList.add('material-symbols-outlined', 'item--btn', 'item--btn--edit');
-    btnEdit.setAttribute('data-btn-edit', '');
     btnEdit.textContent = 'edit_note';
     btnEdit.addEventListener('click', () => {
        input.value = p.textContent;
@@ -168,52 +151,37 @@ function createNote(note) {
 
     const btnDelete = document.createElement('button');
     btnDelete.classList.add('material-symbols-outlined', 'item--btn', 'item--btn--delete');
-    btnDelete.setAttribute('data-btn-delete', '');
     btnDelete.textContent = 'delete';
     btnDelete.addEventListener('click', () => {
         li.remove();
-
-        const i = savedNotes.findIndex(item => item.note === note.note);
-        savedNotes.splice(i, 1);
-
-        updateNotes();
+        updateLocalStorage('delete', note);
     });
 
     btns.appendChild(btnEdit);
     btns.appendChild(btnDelete);
 
-    li.appendChild(text);
+    li.appendChild(div);
     li.appendChild(btns);
 
     if(note.checked) {
         p.classList.add('checked');
 
-        btnCheck.disabled = true;
-        btnCheck.style.color = 'var(--disabled-color)';
-        btnCheck.style.cursor = 'auto';
-
-        btnEdit.disabled = true;
-        btnEdit.style.color = 'var(--disabled-color)';
-        btnEdit.style.borderColor = 'var(--disabled-color)';
-        btnEdit.style.cursor = 'auto';
+        disableBtn(btnCheck);
+        disableBtn(btnEdit);
     }
 
-    noteList.appendChild(li);
+    notesList.appendChild(li);
 
     if(p.offsetHeight > 40) {
         if(note.expanded) {
-            text.style.whiteSpace = 'normal';
+            div.style.whiteSpace = 'normal';
             btnExpand.textContent = 'expand_less';
         } else {
-            text.style.whiteSpace = 'nowrap';
+            div.style.whiteSpace = 'nowrap';
         }
         
         btnExpand.style.display = 'block';
     }
-}
-
-function updateNotes() {
-    localStorage.setItem('notes', JSON.stringify(savedNotes));
 }
 
 function exists() {
@@ -222,11 +190,46 @@ function exists() {
     savedNotes.forEach(item => {
         if(item.note.toLowerCase() === input.value.toLowerCase()) {
             presence = true;
-            return;
         }
     });
 
     return presence;
+}
+
+function resetEdit() {
+    editContent = null;
+    editItem = null;
+}
+
+function disableBtn(element) {
+    element.disabled = true;
+    element.style.color = 'var(--disabled-color)';
+    element.style.borderColor = 'var(--disabled-color)';
+    element.style.cursor = 'auto';
+}
+
+function updateLocalStorage(btn, note) {
+    const i = savedNotes.indexOf(note);
+
+    if(btn === 'delete') {
+        savedNotes.splice(i, 1);
+    } else {
+        savedNotes.splice(i, 1, note);
+    }
+
+    localStorage.setItem('notes', JSON.stringify(savedNotes));
+}
+
+function resetInputValue(message) {
+    input.value = '';
+
+    if(message) {
+        input.setAttribute('placeholder', message);
+    } else {
+        input.setAttribute('placeholder', 'Adicione um item');
+    }
+
+    
 }
 
 const html = document.querySelector('html');
@@ -243,10 +246,8 @@ btnTheme.addEventListener('click', () => {
 themeList.forEach(btn => {
     const currentTheme = btn.classList[1];
 
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
+    btn.addEventListener('click', () => {
         html.setAttribute('data-theme', currentTheme);
-        btnThemeSelection.classList.toggle('theme__selection--hidden');
 
         localStorage.setItem('theme', currentTheme);
     });
