@@ -1,6 +1,6 @@
 # Notas
 
-![Imagem da página](./project.png)
+![Imagem da página](./project.png#vitrinedev)
 
 Projeto de um CRUD simples, desenvolvido com a finalidade de praticar HTML, CSS e JavaScript.
 
