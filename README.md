@@ -1,4 +1,4 @@
-# Notas
+# [Notas](https://krjorn.github.io/bloco-de-notas/)
 
 ![Imagem da página](./project.png#vitrinedev)
 
