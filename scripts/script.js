@@ -105,7 +105,7 @@ function createNote(note) {
 
         note.checked = true;
 
-        updateLocalStorage('check', note);
+        localStorage.setItem('notes', JSON.stringify(savedNotes));
     });
 
     const p = document.createElement('p');
@@ -129,7 +129,7 @@ function createNote(note) {
             note.expanded = false;
         }
 
-        updateLocalStorage('expand', note);
+        localStorage.setItem('notes', JSON.stringify(savedNotes));
     });
 
     div.appendChild(btnCheck);
@@ -154,7 +154,10 @@ function createNote(note) {
     btnDelete.textContent = 'delete';
     btnDelete.addEventListener('click', () => {
         li.remove();
-        updateLocalStorage('delete', note);
+        
+        const i = savedNotes.indexOf(note);
+        savedNotes.splice(i, 1);
+        localStorage.setItem('notes', JSON.stringify(savedNotes));
     });
 
     btns.appendChild(btnEdit);
@@ -188,7 +191,7 @@ function exists() {
     let presence = false;
 
     savedNotes.forEach(item => {
-        if(item.note.toLowerCase() === input.value.toLowerCase()) {
+        if(item.note === input.value) {
             presence = true;
         }
     });
@@ -206,18 +209,6 @@ function disableBtn(element) {
     element.style.color = 'var(--disabled-color)';
     element.style.borderColor = 'var(--disabled-color)';
     element.style.cursor = 'auto';
-}
-
-function updateLocalStorage(btn, note) {
-    const i = savedNotes.indexOf(note);
-
-    if(btn === 'delete') {
-        savedNotes.splice(i, 1);
-    } else {
-        savedNotes.splice(i, 1, note);
-    }
-
-    localStorage.setItem('notes', JSON.stringify(savedNotes));
 }
 
 function resetInputValue(message) {
