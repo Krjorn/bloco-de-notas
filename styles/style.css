@@ -70,9 +70,16 @@ body {
     transition: .15s ease-in;
 }
 
+.form__label {
+    display: block;
+    max-width: 90%;
+    padding-left: 1rem;
+    white-space: nowrap;
+}
+
 .form__item {
     width: 100%;
-    margin-bottom: .5rem;
+    margin: .5rem 0;
     border-radius: 25px;
     background-color: var(--primary-color);
 }
@@ -143,7 +150,8 @@ button {
     color: var(--secondary-color);
 }
 
-.list--item--text p {
+.list--item--text p,
+.form__label {
     overflow: hidden;
     text-overflow: ellipsis;
 }

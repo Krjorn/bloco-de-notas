@@ -1,5 +1,6 @@
 const form = document.querySelector('[data-form]');
 const input = document.querySelector('[data-form-input]');
+const formLabel = document.querySelector('[data-form-label]');
 const btnCancel = document.querySelector('[data-form-cancel]');
 const notesList = document.querySelector('[data-notes-list]');
 
@@ -146,6 +147,7 @@ function createNote(note) {
        editContent = p.textContent;
        editItem = note;
        input.setAttribute('placeholder', `Editando: ${p.textContent}`);
+       formLabel.textContent = `Editando: ${p.textContent}`;
        input.focus();
     });
 
@@ -216,8 +218,10 @@ function resetInputValue(message) {
 
     if(message) {
         input.setAttribute('placeholder', message);
+        formLabel.textContent = message;
     } else {
         input.setAttribute('placeholder', 'Adicione um item');
+        formLabel.textContent = 'Adicione um item';
     }
 
     
