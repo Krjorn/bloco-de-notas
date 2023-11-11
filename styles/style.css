@@ -59,7 +59,7 @@ body {
 .form {
     width: 80%;
     max-width: 500px;
-    margin: 4rem auto;
+    margin: 4.5rem auto;
 }
 
 .form__item,
@@ -211,8 +211,8 @@ button {
 
 .theme__btn--color {
     display: inline-block;
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 2rem;
+    width: 2rem;
     background-color: var(--secondary-color);
     border: 2px solid var(--font-color);
     border-radius: 50%;
@@ -220,14 +220,12 @@ button {
 
 .theme__selection {
     width: fit-content;
-    display: flex;
+    display: none;
     gap: .5rem;
     position: absolute;
-    right: 110%;
-}
-
-.theme__selection--hidden {
-    display: none;
+    right: 0;
+    opacity: 0;
+    z-index: -1;
 }
 
 .bright {

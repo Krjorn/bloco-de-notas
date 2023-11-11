@@ -235,7 +235,13 @@ const themeList = btnThemeSelection.querySelectorAll('span');
 html.setAttribute('data-theme', localStorage.theme ? localStorage.theme : 'bright');
 
 btnTheme.addEventListener('click', () => {
-    btnThemeSelection.classList.toggle('theme__selection--hidden');
+    btnThemeSelection.toggleAttribute('data-hidden');
+
+    if(!btnThemeSelection.hasAttribute('data-hidden')) {
+        gsap.to(btnThemeSelection, {display: 'flex', x: '-50%', opacity: 1});
+    } else {
+        gsap.to(btnThemeSelection, {display: 'none', x: 0, opacity: 0});
+    }
 });
 
 themeList.forEach(btn => {
