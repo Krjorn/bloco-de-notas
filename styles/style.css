@@ -211,8 +211,8 @@ button {
 
 .theme__btn--color {
     display: inline-block;
-    height: 2rem;
-    width: 2rem;
+    height: 32px;
+    width: 32px;
     background-color: var(--secondary-color);
     border: 2px solid var(--font-color);
     border-radius: 50%;
